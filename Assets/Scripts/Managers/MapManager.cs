@@ -61,6 +61,11 @@ public class MapManager : MonoBehaviour
                 {
                     xPos += xOffset / 2f;
                 }
+
+                if(x == -4 && y == -3)
+                {
+                    yPos += 0.2f;
+                }
                 
                 // 3. 3D 월드 좌표 생성 (바닥에 깔리니까 y는 0)
                 Vector3 spawnPos = new Vector3(xPos, yPos, zPos);
