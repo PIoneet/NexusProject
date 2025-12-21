@@ -20,12 +20,7 @@ public class MapManager : MonoBehaviour
     // 키: "x,y" 문자열, 값: 실제 타일 스크립트
     private Dictionary<string, HexTile> tileMap = new Dictionary<string, HexTile>();
 
-    void Start()
-    {
-        GenerateGrid();
-    }
-
-    void GenerateGrid()
+    public void GenerateGrid()
     {
         // 맵이 이미 있다면 정리 (재시작 시 오류 방지)
         foreach(Transform child in transform) //이터레이터 순회
@@ -48,8 +43,8 @@ public class MapManager : MonoBehaviour
                 // 1. 육각형 배치를 위한 좌표 계산 (Offset Coordinate)
                 float xPos = x * xOffset;
                 float zPos = y * zOffset;
-                //float randomYvalue = Random.Range(0f, 0.5f); 
                 float yPos = 0f; 
+                float yScale = 1.0f;
 
                 if(x == 0 && y == 0)
                 {
@@ -66,11 +61,37 @@ public class MapManager : MonoBehaviour
                 {
                     yPos += 0.2f;
                 }
+
+                if(x == -2 && y == -2)
+                {
+                    yPos -= 0.3f;
+                }
+
+                if(x == 3 && y == -2)
+                {
+                    yPos += 1.6f;
+                }
+
+                if(x == 3 && y == -1)
+                {
+                    yPos -= 0.2f;
+                    yScale += 9.0f;
+                }
+
+                if(x == 1 && y == 4)
+                {
+                    yPos -= 0.6f;
+                }
                 
                 // 3. 3D 월드 좌표 생성 (바닥에 깔리니까 y는 0)
                 Vector3 spawnPos = new Vector3(xPos, yPos, zPos);
                 // 4. 타일 생성 (Instantiate)
-                GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
+                GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);//회전은 하지 말라는 뜻
+
+                // 스케일 Y 변경 (원하는 높이로 설정)
+                Vector3 newScale = newTileObj.transform.localScale;
+                newScale.y = yScale;
+                newTileObj.transform.localScale = newScale;
                 
                 // 생성된 타일을 MapManager의 자식으로 정리
                 newTileObj.transform.SetParent(this.transform);
@@ -92,5 +113,15 @@ public class MapManager : MonoBehaviour
         if (tileMap.ContainsKey(key))
             return tileMap[key];
         return null;
+    }
+
+    public Vector3 GetTilePosition(int x, int y)
+    {
+        HexTile tile = GetTileAt(x, y);
+        if (tile != null)
+        {
+            return tile.transform.position;
+        }
+        return Vector3.zero;
     }
 }

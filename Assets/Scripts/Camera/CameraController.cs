@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Cinemachine Camera")]
+    public CinemachineCamera cinCam;
+
     [Header("Movement Settings")]
     public float moveSpeed;
     public float zoomSpeed;
@@ -29,8 +33,8 @@ public class CameraController : MonoBehaviour
         // New Input System 사용
         if (Keyboard.current != null)
         {
-            if(Keyboard.current.qKey.isPressed) transform.rotation = Quaternion.Euler(0, -90, 0);
-            if(Keyboard.current.eKey.isPressed) transform.rotation = Quaternion.Euler(0, 90, 0);
+            if(Keyboard.current.qKey.isPressed) moveRotate.y += 1f;
+            if(Keyboard.current.eKey.isPressed) moveRotate.y -= 1f;
 
             if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) moveDir.z += 1f;
             //z축 앞뒤 이동을 얘기한다.
@@ -45,22 +49,19 @@ public class CameraController : MonoBehaviour
         
         // Space.Self는 Inspector 창의 초기값을 기준으로 회전/이동함.
         // 월드 좌표 기준으로 이동 (카메라가 회전해 있어도 x, z 축으로 이동)
-        //transform.Rotate(moveRotate * rotateSpeed * 100f * Time.deltaTime, Space.World);
-        
+        transform.Rotate(moveRotate * rotateSpeed * Time.deltaTime, Space.World);
 
-        // 카메라가 바라보는 방향(Forward)을 기준으로 하되, 땅으로 파고들지 않게 Y축을 0으로 만듦
-        Vector3 forward = transform.forward;
-        Vector3 right = transform.right;
+        // 카메라의 Y축 회전(바라보는 방향)만 반영하고, X축(기울기)은 무시하여 평면 이동 구현
+        Vector3 forward = transform.forward; //실시간으로 변하는 앞뒤방향 벡터
+        Vector3 right = transform.right;     //실시간으로 변하는 좌우방향 벡터
 
-        forward.y = 0f;
+        forward.y = 0f; //위아래 방향 제거
         right.y = 0f;
 
-        forward.Normalize(); // 방향 벡터만 남기는 작업
+        forward.Normalize();
         right.Normalize();
 
-        // 입력값(moveDir)을 카메라 기준 방향으로 변환
         Vector3 targetDir = (forward * moveDir.z) + (right * moveDir.x);
-
         transform.Translate(targetDir * moveSpeed * Time.deltaTime, Space.World);
 
         if (enableLimits)
@@ -88,11 +89,11 @@ public class CameraController : MonoBehaviour
         if (scroll != 0)
         {
             //Debug.Log("Scroll Value: " + scroll);
-            Vector3 pos = transform.position;
-            // Y축 높이를 조절하여 줌인/줌아웃 구현 (Perspective 카메라 기준)
-            pos.y -= scroll * zoomSpeed * 100f * Time.deltaTime; 
-            pos.y = Mathf.Clamp(pos.y, minZoom, maxZoom);
-            transform.position = pos;
+            float zoom = cinCam.Lens.OrthographicSize;
+            // Y축 높이를 조절하여 줌인/줌아웃 구현 (Orthographic 카메라 기준)
+            zoom -= scroll * zoomSpeed * 100f * Time.deltaTime; 
+            zoom = Mathf.Clamp(zoom, minZoom, maxZoom);
+            cinCam.Lens.OrthographicSize = zoom;
         }
     }
 }
