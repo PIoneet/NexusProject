@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7520341672977343540}
   - component: {fileID: 6266743376539110695}
   - component: {fileID: 6266743376539110692}
+  - component: {fileID: -1123720394315824651}
   m_Layer: 0
   m_Name: Archer Warrior
   m_TagString: Player
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5110086601655028280}
@@ -84,6 +85,20 @@ CapsuleCollider:
   m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 1.25, z: 0}
+--- !u!114 &-1123720394315824651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7520341672977643540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9418c39faf98f49a23b23a32d000b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArcherUnit
+  x: 0
+  y: 0
 --- !u!1001 &5110086601655423198
 PrefabInstance:
   m_ObjectHideFlags: 0
