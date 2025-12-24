@@ -15,9 +15,18 @@ public class UnitManager : MonoBehaviour
     {
         unit.name = $"Unit_{x}_{y}";
     }
-
-    void InitUnitPosition()
+    
+    public void SpawnUnit(int x, int y)
     {
+
+        foreach(var unit in unitMap.Values)
+        {
+            Destroy(unit.gameObject);
+        }
+        unitMap.Clear();
+
+        //유닛 생성
+
         foreach(var unit in units)
         {
             Vector2Int randomPos;
@@ -27,34 +36,16 @@ public class UnitManager : MonoBehaviour
                 int randYValue = Random.Range(-4, 5);
                 randomPos = new Vector2Int(randXValue, randYValue);
             } while (unitMap.ContainsKey(randomPos));
-
-            unitMap.Add(randomPos, unit);    
-        }
-        
-    }
-    
-    public void SpawnUnit(int x, int y)
-    {
-        foreach(Transform child in transform)
-        {
-            Destroy(child.gameObject);
-        }
-        units.Clear();
-
-        //유닛 생성
-
-        foreach(var unit in units)
-        {
-            Vector3 position = mapManager.GetTilePosition(x, y);
+            
+            unitMap.Add(randomPos, unit);
+            Vector3 position = mapManager.GetTilePosition(randomPos.x, randomPos.y);
+            position.y += unitHeight;
             Unit newUnit = Instantiate(unit, position, Quaternion.identity, this.transform);
         
-            Debug.Log($"Spawned Unit at ({x}, {y}) Position: {position}");
-            position.y += unitHeight;
-            newUnit.transform.position = position;
+            Debug.Log($"Spawned Unit at ({randomPos.x}, {randomPos.y}) Position: {position}");
             Debug.Log($"Unit Local Position: {newUnit.transform.localPosition}");
-            InitUnitName(newUnit.gameObject, x, y);
-    
-            units.Add(newUnit);
+            
+            InitUnitName(newUnit.gameObject, randomPos.x, randomPos.y);
 
         }
     }

@@ -86,15 +86,12 @@ public class MapManager : MonoBehaviour
                 // 3. 3D 월드 좌표 생성 (바닥에 깔리니까 y는 0)
                 Vector3 spawnPos = new Vector3(xPos, yPos, zPos);
                 // 4. 타일 생성 (Instantiate)
-                GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);//회전은 하지 말라는 뜻
+                GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity, this.transform);//회전은 하지 말라는 뜻
 
                 // 스케일 Y 변경 (원하는 높이로 설정)
                 Vector3 newScale = newTileObj.transform.localScale;
                 newScale.y = yScale;
                 newTileObj.transform.localScale = newScale;
-                
-                // 생성된 타일을 MapManager의 자식으로 정리
-                newTileObj.transform.SetParent(this.transform);
 
                 // 5. HexTile 데이터 세팅 및 저장
                 HexTile tileScript = newTileObj.GetComponent<HexTile>(); // 프리팹에 안 붙여놨다면 여기서 붙임
