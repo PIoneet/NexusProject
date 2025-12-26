@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class T : MonoBehaviour
+public class Tile : MonoBehaviour
 {
     public TileData tileData;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
