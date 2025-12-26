@@ -42,8 +42,8 @@ public class UnitManager : MonoBehaviour
             position.y += unitHeight;
             Unit newUnit = Instantiate(unit, position, Quaternion.identity, this.transform);
         
-            Debug.Log($"Spawned Unit at ({randomPos.x}, {randomPos.y}) Position: {position}");
-            Debug.Log($"Unit Local Position: {newUnit.transform.localPosition}");
+           //Debug.Log($"Spawned Unit at ({randomPos.x}, {randomPos.y}) Position: {position}");
+            //Debug.Log($"Unit Local Position: {newUnit.transform.localPosition}");
             
             InitUnitName(newUnit.gameObject, randomPos.x, randomPos.y);
 
