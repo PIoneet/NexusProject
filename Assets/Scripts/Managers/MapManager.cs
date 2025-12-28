@@ -5,8 +5,8 @@ public class MapManager : MonoBehaviour
 {
     [Header("Map Settings")]
     public GameObject tilePrefab; // Kenney 3D 타일 프리팹을 여기에 연결
-    public int mapWidth = 10;     // 가로 크기
-    public int mapHeight = 10;    // 세로 크기
+    public int mapWidth;     // 가로 크기
+    public int mapHeight;    // 세로 크기
 
     [Header("Tile Spacing (조절 필요)")]
     // Kenney 에셋 기준 대략적인 값입니다. 
@@ -87,8 +87,8 @@ public class MapManager : MonoBehaviour
                 Vector3 spawnPos = new Vector3(xPos, yPos, zPos);
                 // 4. 타일 생성 (Instantiate)
                 GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity, this.transform);//회전은 하지 말라는 뜻
-
-                // 스케일 Y 변경 (원하는 높이로 설정)
+                //tilePrefab null이면 생성 안됨.
+                
                 Vector3 newScale = newTileObj.transform.localScale;
                 newScale.y = yScale;
                 newTileObj.transform.localScale = newScale;
@@ -109,6 +109,7 @@ public class MapManager : MonoBehaviour
         string key = $"{x},{y}";
         if (tileMap.ContainsKey(key))
             return tileMap[key];
+            //HecTile 반환
         return null;
     }
 
